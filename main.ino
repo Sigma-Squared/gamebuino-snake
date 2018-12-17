@@ -2,19 +2,17 @@
 #include <Gamebuino.h>
 #include <SPI.h>
 
-const int INITIAL_SEG = 10;
-const int MAX_SEG = 256;
-const int SEG_ADDED = 3;
-const int WWIDTH = LCDWIDTH / 2;
-const int WHEIGHT = LCDHEIGHT / 2;
+#define INITIAL_SEG 10
+#define MAX_SEG 256
+#define SEG_ADDED 3
+const byte WWIDTH = LCDWIDTH / 2;
+const byte WHEIGHT = LCDHEIGHT / 2;
 
-int num_seg;
-int frame_delay = 3;
-int STARTX;
-int STARTY;
+byte num_seg;
+byte frame_delay = 3;
 char snake[2 * MAX_SEG];
-int vx, vy;
-int fx, fy;
+char vx, vy;
+byte fx, fy;
 byte score;
 byte max_score;
 
@@ -66,14 +64,12 @@ void setup() {
 
 void gamestart() {
     game_state = PLAY;
-    STARTX = WWIDTH / 2;
-    STARTY = WHEIGHT / 2;
     fx = random(WWIDTH);
     fy = random(WHEIGHT);
     num_seg = INITIAL_SEG;
     for (int i = 0; i < num_seg; i++) {
-        snake[2 * i] = STARTX - i;
-        snake[2 * i + 1] = STARTY;
+        snake[2 * i] = WWIDTH/2 - i;
+        snake[2 * i + 1] = WHEIGHT/2;
     }
     vx = 1;
     vy = 0;
