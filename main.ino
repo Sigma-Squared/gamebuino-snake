@@ -67,7 +67,7 @@ void gamestart() {
     fx = random(WWIDTH);
     fy = random(WHEIGHT);
     num_seg = INITIAL_SEG;
-    for (int i = 0; i < num_seg; i++) {
+    for (byte i = 0; i < num_seg; i++) {
         snake[2 * i] = WWIDTH/2 - i;
         snake[2 * i + 1] = WHEIGHT/2;
     }
@@ -132,7 +132,7 @@ void internal_update() {
                     y += vy;
                     x = (x + WWIDTH) % WWIDTH;
                     y = (y + WHEIGHT) % WHEIGHT;
-                    for (int j = 1; j < num_seg; j++) {
+                    for (byte j = 1; j < num_seg; j++) {
                         if (x == snake[2 * j] && y == snake[2 * j + 1]) {
                             gameover();
                             return;
@@ -141,7 +141,7 @@ void internal_update() {
                     if (x == fx && y == fy) {
                         gb.sound.playTick();
                         if (num_seg + SEG_ADDED < MAX_SEG) {
-                            for (int j = 0; j < SEG_ADDED; j++) {
+                            for (byte j = 0; j < SEG_ADDED; j++) {
                                 snake[2 * (num_seg + j)] = fx;
                                 snake[2 * (num_seg + j) + 1] = fy;
                             }
@@ -180,7 +180,7 @@ void draw2x2(int x, int y) {
 void draw() {
     switch (game_state) {
         case PLAY:
-            for (int i = 0; i < num_seg; i++) {
+            for (byte i = 0; i < num_seg; i++) {
                 auto x = snake[i * 2];
                 auto y = snake[i * 2 + 1];
                 if (i == 0) {
