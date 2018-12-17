@@ -1,13 +1,14 @@
+#include <EEPROM.h>
 #include <Gamebuino.h>
 #include <SPI.h>
-#include <EEPROM.h>
 
-Gamebuino gb;
-
-int num_seg;
 const int INITIAL_SEG = 10;
 const int MAX_SEG = 256;
 const int SEG_ADDED = 3;
+const int WWIDTH = LCDWIDTH / 2;
+const int WHEIGHT = LCDHEIGHT / 2;
+
+int num_seg;
 int frame_delay = 3;
 int STARTX;
 int STARTY;
@@ -16,11 +17,12 @@ int vx, vy;
 int fx, fy;
 byte score;
 byte max_score;
-const int WWIDTH = LCDWIDTH / 2;
-const int WHEIGHT = LCDHEIGHT / 2;
+
 enum GAME_STATE_T { PLAY,
                     GAMEOVER };
-GAME_STATE_T gamestate;
+GAME_STATE_T game_state;
+
+Gamebuino gb;
 
 const byte PROGMEM logo[] = {
     64, 30,
@@ -63,7 +65,7 @@ void setup() {
 }
 
 void gamestart() {
-    gamestate = PLAY;
+    game_state = PLAY;
     STARTX = WWIDTH / 2;
     STARTY = WHEIGHT / 2;
     fx = random(WWIDTH);
@@ -81,7 +83,7 @@ void gamestart() {
 }
 
 void gameover() {
-    gamestate = GAMEOVER;
+    game_state = GAMEOVER;
     if (score > max_score) {
         max_score = score;
         EEPROM.update(0, max_score);
@@ -93,7 +95,7 @@ void input() {
         gb.sound.playCancel();
         gb.titleScreen(F("Snake"), logo);
     }
-    switch (gamestate) {
+    switch (game_state) {
         case PLAY: {
             bool up = gb.buttons.pressed(BTN_UP);
             bool down = gb.buttons.pressed(BTN_DOWN);
@@ -124,7 +126,7 @@ void input() {
 }
 
 void internal_update() {
-    switch (gamestate) {
+    switch (game_state) {
         case PLAY:
             for (int i = num_seg - 1; i >= 0; i--) {
                 auto &x = snake[2 * i];
@@ -180,7 +182,7 @@ void draw2x2(int x, int y) {
 }
 
 void draw() {
-    switch (gamestate) {
+    switch (game_state) {
         case PLAY:
             for (int i = 0; i < num_seg; i++) {
                 auto x = snake[i * 2];
